@@ -43,6 +43,7 @@ MediaProxy = Proxy.Media
 Metadata = MetadataSearchResult
 Trailer = TrailerObject
 
+
 COUNTRY_CODES = {
     'Australia': 'Australia,AU',
     'Canada': 'Canada,CA',
@@ -53,12 +54,14 @@ COUNTRY_CODES = {
     'United States': 'USA,',
 }
 
+
 PERCENT_RATINGS = {
     'rottentomatoes',
     'rotten tomatoes',
     'rt',
     'flixster',
 }
+
 
 NFO_TEXT_REGEX_1 = re.compile(
     r'&(?![A-Za-z]+[0-9]*;|#[0-9]+;|#x[0-9a-fA-F]+;)'
@@ -68,6 +71,7 @@ RATING_REGEX_1 = re.compile(
     r'(?:Rated\s)?(?P<mpaa>[A-z0-9-+/.]+(?:\s[0-9]+[A-z]?)?)?'
 )
 RATING_REGEX_2 = re.compile(r'\s*\(.*?\)')
+
 
 def first(iterable, default=None):
     for item in iterable:
@@ -112,6 +116,7 @@ class XBMCNFO(PlexAgent):
         'com.plexapp.agents.imdb',
         'com.plexapp.agents.none'
     ]
+
 
 # ##### search function #####
     def search(self, results, media, lang):
@@ -334,7 +339,7 @@ class XBMCNFO(PlexAgent):
             fanart_names.append(os.path.join(folder_path, 'background.jpg'))
             if is_dvd:
                 fanart_names.append(os.path.join(folder_path_dvd, 'background.jpg'))
-            
+
             extend_file_name(fanart_names)
             # check possible fanart file locations
             fanart_filename = check_file_paths(fanart_names, 'fanart')
@@ -733,7 +738,7 @@ class XBMCNFO(PlexAgent):
                     try:
                         newrole.name = actor.xpath('name')[0].text
                     except:
-                        newrole.name = 'Unknown Name ' + str(n)
+                        #newrole.name = 'Unknown Name ' + str(n)
                         pass
                     try:
                         role = actor.xpath('role')[0].text
@@ -743,7 +748,7 @@ class XBMCNFO(PlexAgent):
                             newrole.role = role
                         rroles.append (newrole.role)
                     except:
-                        newrole.role = 'Unknown Role ' + str(n)
+                        #newrole.role = 'Unknown Role ' + str(n)
                         pass
                     newrole.photo = ''
                     athumbloc = preferences['athumblocation']
