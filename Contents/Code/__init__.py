@@ -78,6 +78,7 @@ def first(iterable, default=None):
         return item
     return default
 
+
 class NFOReader:
     def __init__(self, nfo_xml):
         self.nfo_xml = nfo_xml
@@ -117,22 +118,18 @@ class XBMCNFO(PlexAgent):
         'com.plexapp.agents.none'
     ]
 
-
-# ##### search function #####
     def search(self, results, media, lang):
         log.debug('++++++++++++++++++++++++')
         log.debug('Entering search function')
         log.debug('++++++++++++++++++++++++')
 
-        log.info('{plugin} Version: {number}'.format(
-            plugin=self.name, number=self.ver))
-        log.debug('Plex Server Version: {number}'.format(
-            number=Platform.ServerVersion))
+        log.info('{plugin} Version: {number}'.format(plugin=self.name, number=self.ver))
+        log.debug('Plex Server Version: {number}'.format(number=Platform.ServerVersion))
 
         if preferences['debug']:
-            log.info ('Agents debug logging is enabled!')
+            log.info('Agents debug logging is enabled!')
         else:
-            log.info ('Agents debug logging is disabled!')
+            log.info('Agents debug logging is disabled!')
 
         path1 = media.items[0].parts[0].file
         log.debug('media file: {name}'.format(name=path1))
@@ -221,14 +218,14 @@ class XBMCNFO(PlexAgent):
                     id = ''
                     pass
                 if len(id) > 2:
-                        media.id = id
-                        log.debug('ID from nfo: {id}'.format(id=media.id))
+                    media.id = id
+                    log.debug('ID from nfo: {id}'.format(id=media.id))
                 else:
-                    # if movie id doesn't exist, create
-                    # one based on hash of title and year
+                    # if movie id doesn't exist, create one based on hash of title and year
                     def ord3(x):
                         return '%.3d' % ord(x)
-                    id = int(''.join(map(ord3, media.name+str(media.year))))
+
+                    id = int(''.join(map(ord3, media.name + str(media.year))))
                     id = str(abs(hash(int(id))))
                     media.id = id
                     log.debug('ID generated: {id}'.format(id=media.id))
@@ -245,22 +242,18 @@ class XBMCNFO(PlexAgent):
                 log.info('ERROR: No <movie> tag in {nfo}. Aborting!'.format(
                     nfo=nfo_file))
 
-# ##### update Function #####
-
     def update(self, metadata, media, lang):
         log.debug('++++++++++++++++++++++++')
         log.debug('Entering update function')
         log.debug('++++++++++++++++++++++++')
 
-        log.info('{plugin} Version: {number}'.format(
-            plugin=self.name, number=self.ver))
-        log.debug('Plex Server Version: {number}'.format(
-            number=Platform.ServerVersion))
+        log.info('{plugin} Version: {number}'.format(plugin=self.name, number=self.ver))
+        log.debug('Plex Server Version: {number}'.format(number=Platform.ServerVersion))
 
         if preferences['debug']:
-            log.info ('Agents debug logging is enabled!')
+            log.info('Agents debug logging is enabled!')
         else:
-            log.info ('Agents debug logging is disabled!')
+            log.info('Agents debug logging is disabled!')
 
         poster_data = None
         poster_filename = None
@@ -695,7 +688,7 @@ class XBMCNFO(PlexAgent):
                     sets_list = nfo_reader.read_sets_name()
                     for setname in sets_list:
                         setname = setname_pat.sub('', setname.strip())
-                        if setname: # skip empty name
+                        if setname:  # skip empty name
                             log.debug('Set name found: ' + setname)
                             metadata.collections.add(setname)
                             log.debug('Added Collection: {}'.format(setname))
@@ -738,7 +731,7 @@ class XBMCNFO(PlexAgent):
                     try:
                         newrole.name = actor.xpath('name')[0].text
                     except:
-                        #newrole.name = 'Unknown Name ' + str(n)
+                        # newrole.name = 'Unknown Name ' + str(n)
                         pass
                     try:
                         role = actor.xpath('role')[0].text
@@ -746,13 +739,13 @@ class XBMCNFO(PlexAgent):
                             newrole.role = role + ' ' + str(n)
                         else:
                             newrole.role = role
-                        rroles.append (newrole.role)
+                        rroles.append(newrole.role)
                     except:
-                        #newrole.role = 'Unknown Role ' + str(n)
+                        # newrole.role = 'Unknown Role ' + str(n)
                         pass
                     newrole.photo = ''
                     athumbloc = preferences['athumblocation']
-                    if athumbloc in ['local','global']:
+                    if athumbloc in ['local', 'global']:
                         aname = None
                         try:
                             try:
@@ -761,24 +754,24 @@ class XBMCNFO(PlexAgent):
                                 pass
                             if aname:
                                 aimagefilename = aname.replace(' ', '_') + '.jpg'
-                                athumbpath = preferences['athumbpath'].rstrip ('/')
+                                athumbpath = preferences['athumbpath'].rstrip('/')
                                 if not athumbpath == '':
                                     if athumbloc == 'local':
-                                        localpath = os.path.join (folder_path,'.actors',aimagefilename)
+                                        localpath = os.path.join(folder_path, '.actors', aimagefilename)
                                         scheme, netloc, path, qs, anchor = urlparse.urlsplit(athumbpath)
-                                        basepath = os.path.basename (path)
-                                        log.debug ('Searching for additional path parts after: ' + basepath)
-                                        searchpos = folder_path.find (basepath)
+                                        basepath = os.path.basename(path)
+                                        log.debug('Searching for additional path parts after: ' + basepath)
+                                        searchpos = folder_path.find(basepath)
                                         addpos = searchpos + len(basepath)
                                         addpath = os.path.dirname(folder_path)[addpos:]
-                                        if searchpos != -1 and addpath !='':
-                                            log.debug ('Found additional path parts: ' + addpath)
+                                        if searchpos != -1 and addpath != '':
+                                            log.debug('Found additional path parts: ' + addpath)
                                         else:
                                             addpath = ''
-                                            log.debug ('Found no additional path parts.')
+                                            log.debug('Found no additional path parts.')
                                         aimagepath = athumbpath + addpath + '/' + os.path.basename(folder_path) + '/.actors/' + aimagefilename
                                         if not os.path.isfile(localpath):
-                                            log.debug ('failed setting ' + athumbloc + ' actor photo: ' + aimagepath)
+                                            log.debug('failed setting ' + athumbloc + ' actor photo: ' + aimagepath)
                                             aimagepath = None
                                     if athumbloc == 'global':
                                         aimagepath = athumbpath + '/' + aimagefilename
@@ -789,21 +782,21 @@ class XBMCNFO(PlexAgent):
                                         aimagepathurl = urlparse.urlunsplit((scheme, netloc, path, qs, anchor))
                                         response = urllib.urlopen(aimagepathurl).code
                                         if not response == 200:
-                                            log.debug ('failed setting ' + athumbloc + ' actor photo: ' + aimagepath)
+                                            log.debug('failed setting ' + athumbloc + ' actor photo: ' + aimagepath)
                                             aimagepath = None
                                     if aimagepath:
                                         newrole.photo = aimagepath
-                                        log.debug ('success setting ' + athumbloc + ' actor photo: ' + aimagepath)
+                                        log.debug('success setting ' + athumbloc + ' actor photo: ' + aimagepath)
                         except:
-                            log.debug ('exception setting local or global actor photo!')
-                            log.debug ("Traceback: " + traceback.format_exc())
+                            log.debug('exception setting local or global actor photo!')
+                            log.debug("Traceback: " + traceback.format_exc())
                             pass
                     if athumbloc == 'link' or not newrole.photo:
                         try:
                             newrole.photo = actor.xpath('thumb')[0].text
-                            log.debug ('linked actor photo: ' + newrole.photo)
+                            log.debug('linked actor photo: ' + newrole.photo)
                         except:
-                            log.debug ('failed setting linked actor photo!')
+                            log.debug('failed setting linked actor photo!')
                             pass
 
                 if not preferences['localmediaagent']:
@@ -815,9 +808,9 @@ class XBMCNFO(PlexAgent):
                             try:
                                 title = ''
                                 if fn.endswith('-trailer'):
-                                        title = ' '.join(fn.split('-')[:-1])
+                                    title = ' '.join(fn.split('-')[:-1])
                                 if fn == 'trailer' or f.startswith('movie-trailer'):
-                                        title = metadata.title
+                                    title = metadata.title
                                 if title != '':
                                     metadata.extras.add(Trailer(title=title, file=os.path.join(folder_path, f)))
                                     log.debug('Found trailer file ' + os.path.join(folder_path, f))
@@ -937,9 +930,9 @@ class XBMCNFO(PlexAgent):
                          ' Aborting!'.format(nfo=nfo_file))
             return metadata
 
+
 xbmcnfo = XBMCNFO
 
-# -- LOG ADAPTER -------------------------------------------------------------
 
 class PlexLogAdapter(object):
     """
@@ -968,10 +961,9 @@ class XBMCLogAdapter(PlexLogAdapter):
         if preferences['debug']:
             Log.Debug(*args, **kwargs)
 
+
 log = XBMCLogAdapter
 
-
-# -- HELPER FUNCTIONS --------------------------------------------------------
 
 VIDEO_FILE_BASE_REGEX = re.compile(
     r'(?is)\s*-\s*(cd|dvd|disc|disk|part|pt|d)\s*[0-9]$'
@@ -1100,8 +1092,8 @@ def remove_empty_tags(document):
     empty_tags = []
     for xml_tag in document.iter('*'):
         if not(len(xml_tag) or (xml_tag.text and xml_tag.text.strip())):
-                empty_tags.append(xml_tag.tag)
-                xml_tag.getparent().remove(xml_tag)
+            empty_tags.append(xml_tag.tag)
+            xml_tag.getparent().remove(xml_tag)
     log.debug('Empty XMLTags removed: {number} {tags}'.format(
         number=len(empty_tags) or None,
         tags=sorted(set(empty_tags)) or ''
@@ -1109,7 +1101,7 @@ def remove_empty_tags(document):
     return document
 
 
-UNESCAPE_REGEX = re.compile('&#?\w+;')
+UNESCAPE_REGEX = re.compile(r'&#?\w+;')
 
 
 def unescape(markup):
@@ -1144,8 +1136,11 @@ def unescape(markup):
 
     return UNESCAPE_REGEX.sub(fix_up, markup)
 
-def extend_file_name(file_names):
-    file_names.extend(list(map(replace_jpg_png, file_names)))
 
-def replace_jpg_png(path):
-    return path.replace('jpg', 'png')
+def extend_file_name(file_names):
+    file_names.extend(list([replace_image_ext(file, 'png') for file in file_names]))
+    file_names.extend(list([replace_image_ext(file, 'webp') for file in file_names]))
+
+
+def replace_image_ext(path, file_type):
+    return path.replace('jpg', file_type)

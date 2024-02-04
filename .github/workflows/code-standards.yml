@@ -11,12 +11,13 @@ jobs:
     name: Lint
     steps:
       - name: Check out source repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: flake8 Lint
         uses: reviewdog/action-flake8@v3
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
+          reporter: 'github-check'
           filter_mode: file
           fail_on_error: true
-          flake8_args: '--ignore E501,E722,F,C9,N8 --exclude Contents/Libraries/Shared'
+          flake8_args: '--ignore E501,E722,F,C9,N8'

@@ -8,7 +8,7 @@ from __init__ import log
 
 def process_subtitle_files(part):
     """
-    Search for related subtitle files and add them to the media item.  
+    Search for related subtitle files and add them to the media item.
 
     This function searches for subtitle files related to a given part in the part's folder
     It will also attempt to locate related files in a global subtitle folder
@@ -18,13 +18,13 @@ def process_subtitle_files(part):
     :return: list containing related subtitle files
     """
     subtitle_files = []
-    SUB_EXT = [ '.idx', '.sub', '.srt', '.smi', '.utf', '.utf8', '.utf-8', '.rt', '.ssa', '.ass', '.aqt', '.jss', '.txt', '.psb' ]
+    SUB_EXT = ['.idx', '.sub', '.srt', '.smi', '.utf', '.utf8', '.utf-8', '.rt', '.ssa', '.ass', '.aqt', '.jss', '.txt', '.psb']
     (part_file_path, part_file_name) = os.path.split(part.file)
     (part_file_base_name, part_file_ext) = os.path.splitext(part_file_name)
-    search_paths = [ part_file_path ]
+    search_paths = [part_file_path]
 
     try:
-        if preferences['subglobalpath'] == None:
+        if preferences['subglobalpath'] is None:
             log.debug("No global subtitle folder has been set")
         elif os.path.isdir(preferences['subglobalpath']):
             search_paths.append(preferences['subglobalpath'])
@@ -47,12 +47,12 @@ def process_subtitle_files(part):
             file_ext = file_ext.lower()
 
             # If the file does not have a valid extension or does not match the part file name, skip it
-            if not ( file_ext in SUB_EXT and file_base_name.startswith(part_file_base_name) ):
+            if not (file_ext in SUB_EXT and file_base_name.startswith(part_file_base_name)):
                 continue
 
             # Set/Reset some default variable values for every file
             sub_flag = ""
-            lang_code = "xx" # Default to the 'unknown' language code
+            lang_code = "xx"  # Default to the 'unknown' language code
             forced = ''
             default = ''
             sub_codec = None
@@ -123,7 +123,7 @@ def process_subtitle_files(part):
 
                 for idx_lang_code in idx_languages:
                     log.debug("Found landuage '{}' in file: {}".format(idx_lang_code, idx_full_name))
-                    part.subtitles[idx_lang_code][file_base_name] = Proxy.LocalFile(idx_full_name, index = str(idx_language_index), format = "vobsub")
+                    part.subtitles[idx_lang_code][file_base_name] = Proxy.LocalFile(idx_full_name, index=str(idx_language_index), format="vobsub")
                     idx_language_index += 1
 
                     file_vars["lang_code"] = idx_lang_code
@@ -131,16 +131,16 @@ def process_subtitle_files(part):
                     file_vars["status"] = "success"
                     subtitle_files.append(file_vars)
 
-                # When finished processing all the languages in the idx file, move on to the next file  
+                # When finished processing all the languages in the idx file, move on to the next file
                 continue
 
             elif file_ext in ['.txt', '.sub']:
                 try:
-                    #sub_file_contents = Core.storage.load(full_name)
-                    sub_file_lines = [ line.strip() for line in Core.storage.load(full_name).splitlines(True) ]
+                    # sub_file_contents = Core.storage.load(full_name)
+                    sub_file_lines = [line.strip() for line in Core.storage.load(full_name).splitlines(True)]
                     if '[SUBTITLE]' in lines[1]:
                         sub_format = 'subviewer'
-                    elif re.match('^\{[0-9]+\}\{[0-9]*\}', lines[1]):
+                    elif re.match(r'^\{[0-9]+\}\{[0-9]*\}', lines[1]):
                         sub_format = 'microdvd'
                     elif re.match('^[0-9]{1,2}:[0-9]{2}:[0-9]{2}[:=,]', lines[1]):
                         sub_format = 'txt'
@@ -160,7 +160,7 @@ def process_subtitle_files(part):
             if sub_format is None:
                 sub_format = sub_codec
 
-            part.subtitles[lang_code][file_base_name] = Proxy.LocalFile(full_name, codec = sub_codec, format = sub_format, default = default, forced = forced)
+            part.subtitles[lang_code][file_base_name] = Proxy.LocalFile(full_name, codec=sub_codec, format=sub_format, default=default, forced=forced)
 
             file_vars["status"] = "success"
             file_vars["format"] = sub_format
@@ -185,7 +185,7 @@ def cleanup_subtitle_entries(part, subtitle_files):
             continue
 
         # Make sure the language key eists in the dictionary as a list
-        if not dict_code_basename.has_key(subtitle_file["lang_code"]):
+        if dict_code_basename not in subtitle_file["lang_code"]:
             dict_code_basename[subtitle_file["lang_code"]] = []
 
         # Add the basename to the list for the appropriate language code
