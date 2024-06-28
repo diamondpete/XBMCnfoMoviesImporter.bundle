@@ -919,6 +919,7 @@ class XBMCNFO(PlexAgent):
                 for actor in metadata.roles:
                     try:
                         log.info('\t{actor.name} > {actor.role}'.format(actor=actor))
+                        log.info('\t%s' % newrole.photo)
                     except:
                         try:
                             log.info('\t{actor.name}'.format(actor=actor))
